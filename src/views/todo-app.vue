@@ -1,5 +1,5 @@
 <script lang="ts">
-  import {defineComponent, reactive, ref} from 'vue'
+  import {computed, defineComponent, reactive, ref, watch} from 'vue'
 
   interface TODO {
     id: string
@@ -67,9 +67,21 @@
         }
       }
 
+      const todosCount = computed(
+        () => todos.active.length + todos.completed.length
+      )
+      // watch(
+      //   todos,
+      //   ({active, completed}) => {
+      //     todosCount.value = active.length + completed.length
+      //   },
+      //   {immediate: true}
+      // )
+
       return {
         input,
         todos,
+        todosCount,
         handleEnter,
         removeTodo,
         restoreTodo,
@@ -89,6 +101,7 @@
       class="input"
     />
     <ul class="list">
+      <li class="subheader">All ({{ todosCount }})</li>
       <li class="item" v-for="todo in todos.active" :key="todo.id">
         <span>{{ todo.value }}</span>
         <div class="item-buttons">
